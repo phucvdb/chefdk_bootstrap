@@ -15,7 +15,7 @@
 
 name             'teracydev_installation'
 maintainer       'Teracy, Inc.'
-maintainer_email 'techcheftm@nordstrom.com'
+maintainer_email 'dev@teracy.com'
 license          'Apache 2.0'
 description      'Bootstrap a developer workstation for local Chef development using the ChefDK'
 version          '0.0.1'
