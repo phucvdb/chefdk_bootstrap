@@ -3,7 +3,7 @@
   "description": "Bootstrap a developer workstation for local Chef development using the ChefDK",
   "long_description": "",
   "maintainer": "Teracy, Inc.",
-  "maintainer_email": "techcheftm@nordstrom.com",
+  "maintainer_email": "dev@teracy.com",
   "license": "Apache 2.0",
   "platforms": {
     "windows": ">= 0.0.0",

@@ -37,6 +37,7 @@ when 'windows'
     install['gitextensions'] = true
     install['poshgit'] = true
     install['conemu'] = true
+    install['cygwin'] = true
   end
   default['vagrant']['msi_version'] = '1.9.1'
   default['vagrant']['url']         = 'https://releases.hashicorp.com/vagrant/1.9.1/vagrant_1.9.1.msi'

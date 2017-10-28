@@ -9,3 +9,6 @@ bin/*
 .kitchen.local.yml
 
 Berksfile.lock
+
+local-mode-cache/
+berks-cookbooks/
