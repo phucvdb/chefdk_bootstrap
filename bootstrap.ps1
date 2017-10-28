@@ -153,6 +153,8 @@ function Install-Project {
   # Add ChefDK to the path
   $env:Path += ";C:\opscode\chefdk\bin"
 
+  $tempInstallDi=Join-Path -path $tempInstallDir -childpath 'chefdk_bootstrap-master'
+
   Push-Location $tempInstallDir
 
   # Install the bootstrap cookbooks using Berkshelf
