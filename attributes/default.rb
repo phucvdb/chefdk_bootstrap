@@ -37,7 +37,11 @@ when 'windows'
     install['gitextensions'] = true
     install['poshgit'] = true
     install['conemu'] = true
+    install['cygwin'] = true
   end
+  default['vagrant']['msi_version'] = '1.9.1'
+  default['vagrant']['url']         = 'https://releases.hashicorp.com/vagrant/1.9.1/vagrant_1.9.1.msi'
+  default['vagrant']['checksum']    = 'db1fef59dd15ac90b6f5cfad20af7e15eccd814556a81f46e5422386166789a6'  
 when 'mac_os_x'
   default['chefdk_bootstrap']['package'].tap do |install|
     install['iterm2'] = true
@@ -54,5 +58,5 @@ default['chefdk_bootstrap']['proxy']['http'] = ENV['http_proxy'] # 'http://mypro
 # Skip the proxy for these domains and IPs. This should be a comma-separated string
 default['chefdk_bootstrap']['proxy']['no_proxy'] = ENV['no_proxy'] # 'example.com,localhost,127.0.0.1'
 
-default['chefdk_bootstrap']['virtualbox']['source'] = 'http://download.virtualbox.org/virtualbox/5.0.14/VirtualBox-5.0.14-105127-OSX.dmg'
-default['chefdk_bootstrap']['virtualbox']['checksum'] = '4de41068712eb819749b5376c90dca47f9a1d6eecf4c516d83269ac12add2aa4'
+default['chefdk_bootstrap']['virtualbox']['source'] = 'http://download.virtualbox.org/virtualbox/5.1.14/VirtualBox-5.1.14-112924-OSX.dmg'
+default['chefdk_bootstrap']['virtualbox']['checksum'] = 'f12ed3b1f98c45074e52742d1006c418acd22d0d91e8a6fb6f7b3121c21ce998'

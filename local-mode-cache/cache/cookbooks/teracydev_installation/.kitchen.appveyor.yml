@@ -1,0 +1,32 @@
+---
+driver:
+  name: proxy
+  host: localhost
+  reset_command: "exit 0"
+  port: <%= ENV["machine_port"] %>
+  username: <%= ENV["machine_user"] %>
+  password: <%= ENV["machine_pass"] %>
+
+provisioner:
+  name: chef_zero
+  chef_omnibus_install_options: -P chefdk
+  chef_omnibus_root: c:/opscode/chefdk
+
+platforms:
+  - name: windows-2012r2
+    driver_config:
+      box: mwrock/Windows2012R2
+
+verifier:
+  name: inspec
+
+suites:
+  - name: default
+    run_list:
+      - recipe[win_proxy]
+      - recipe[chefdk_bootstrap]
+      - recipe[chefdk_bootstrap::fix_profile]
+    # attributes:
+    #   chefdk_bootstrap:
+    #     package:
+    #       poshgit: false

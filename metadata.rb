@@ -13,21 +13,21 @@
 # limitations under the License.
 #
 
-name             'chefdk_bootstrap'
-maintainer       'Nordstrom, Inc.'
+name             'teracydev_installation'
+maintainer       'Teracy, Inc.'
 maintainer_email 'techcheftm@nordstrom.com'
 license          'Apache 2.0'
 description      'Bootstrap a developer workstation for local Chef development using the ChefDK'
-version          '2.0.1'
+version          '0.0.1'
 
 supports 'windows'
 supports 'mac_os_x'
 
 depends 'atom', '~> 0.2.0'
 depends 'chocolatey', '~> 1.0'
-depends 'homebrew', '~> 2.0'
+depends 'homebrew', '~> 4.2.0'
 depends 'line', '~> 0.6'
-depends 'vagrant', '~> 0.5'
+depends 'vagrant', '~> 0.7.1'
 depends 'windows', '~> 1.39'
 
 source_url 'https://github.com/Nordstrom/chefdk_bootstrap'
