@@ -108,7 +108,7 @@ function Install-Project {
   # Download the $TeracyDevInstallationurl and create the temporary installation directory
   if (!(Test-Path $tempInstallDir -pathType container)) {
     #New-Item -ItemType 'directory' -path $tempInstallDir
-    Invoke-WebRequest -Uri $TeracyDevInstallationurl -OutFile $tempInstallDir  
+    Invoke-WebRequest -Uri $TeracyDevInstallationurl -OutFile $zipfile  
     Unzip $zipfile $tempInstallDir
   }
 
