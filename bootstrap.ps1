@@ -13,9 +13,16 @@
 # limitations under the License.
 #Requires -Version 3.0
 
-new-module -name ChefDKBootstrap -scriptblock {
+new-module -name TeracyDevInstallation -scriptblock {
+
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+function Unzip
+{
+  param([string]$zipfile, [string]$outpath)  
+  [System.IO.Compression.ZipFile]::ExtractToDirectory($zipfile, $outpath)
+}
 function promptContinue {
-  param ($msg="Chefdk_bootstrap encountered an error")
+  param ($msg="TeracyDev Installation encountered an error")
   $yn = Read-Host "$Msg. Continue? [y|N]"
   if ( $yn -NotLike 'y*' ) {
     Break
@@ -23,7 +30,7 @@ function promptContinue {
 }
 
 function die {
-  param ($msg="Chefdk_bootstrap encountered an error. Exiting")
+  param ($msg="TeracyDev Installation encountered an error. Exiting")
   Write-host "$msg."
   Break
 }
@@ -60,28 +67,29 @@ function Install-Project {
     $targetChefDk = $version
   }
 
-  $bootstrapCookbook = 'chefdk_bootstrap'
+  $bootstrapCookbook = 'teracydev_installation'
 
   $userChefDir = Join-Path -path $env:USERPROFILE -childPath 'chef'
   $dotChefDKDir = Join-Path -path $env:LOCALAPPDATA -childPath 'chefdk'
-  $tempInstallDir = Join-Path -path $env:TEMP -childpath 'chefdk_bootstrap'
-  $berksfilePath = Join-Path -path $tempInstallDir -childPath 'Berksfile'
+  $tempInstallDir = Join-Path -path $env:TEMP -childpath 'TeracyDevInstallation'
+  #$berksfilePath = Join-Path -path $tempInstallDir -childPath 'Berksfile'
   $chefConfigPath = Join-Path -path $tempInstallDir -childPath 'client.rb'
   $omniUrl = "https://omnitruck.chef.io/install.ps1"
+  $TeracyDevInstallationurl = "https://github.com/phucvdb/chefdk_bootstrap/archive/master.zip"
+  $zipfile=Join-Path -path $env:TEMP -childpath 'TeracyDevInstallation.zip'
 
   # Set HOME to be c:\users\<username> so cookbook gem installs are on the c:\
   # drive
   $env:HOME = $env:USERPROFILE
 
-  $berksfile = @"
-  source 'https://supermarket.chef.io'
+  #$berksfile = @"
+  #source 'https://supermarket.chef.io'
+  #cookbook '$bootstrapCookbook', '~> 2.0.1'
+#"@
 
-  cookbook '$bootstrapCookbook', '~> 2.0.1'
-"@
-
-  $chefConfig = @"
-  cookbook_path File.join(Dir.pwd, 'berks-cookbooks')
-"@
+  #$chefConfig = @"
+  #cookbook_path File.join(Dir.pwd, 'berks-cookbooks')
+#"@
 
   $introduction = @"
 
@@ -97,16 +105,18 @@ function Install-Project {
 
   Write-Host $introduction
 
-  # create the temporary installation directory
+  # Download the $TeracyDevInstallationurl and create the temporary installation directory
   if (!(Test-Path $tempInstallDir -pathType container)) {
-    New-Item -ItemType 'directory' -path $tempInstallDir
+    #New-Item -ItemType 'directory' -path $tempInstallDir
+    Invoke-WebRequest -Uri $TeracyDevInstallationurl -OutFile $tempInstallDir  
+    Unzip $zipfile $tempInstallDir
   }
 
   # Write out a local Berksfile for Berkshelf to use
-  $berksfile | Out-File -FilePath $berksfilePath -Encoding ASCII
+  #$berksfile | Out-File -FilePath $berksfilePath -Encoding ASCII
 
   # Write out minimal chef-client config file
-  $chefConfig | Out-File -FilePath $chefConfigPath -Encoding ASCII
+  #$chefConfig | Out-File -FilePath $chefConfigPath -Encoding ASCII
 
   # Install ChefDK from chef omnitruck, unless installed already
   Write-Host "Checking for installed ChefDK version"
