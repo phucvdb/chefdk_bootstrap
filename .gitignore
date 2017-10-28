@@ -10,5 +10,5 @@ bin/*
 
 Berksfile.lock
 
-local-mode-cache/
-berks-cookbooks/
+local-mode-cache/*
+berks-cookbooks/*
