@@ -73,7 +73,7 @@ function Install-Project {
   $dotChefDKDir = Join-Path -path $env:LOCALAPPDATA -childPath 'chefdk'
   $tempInstallDir = Join-Path -path $env:TEMP -childpath 'TeracyDevInstallation'
   #$berksfilePath = Join-Path -path $tempInstallDir -childPath 'Berksfile'
-  $chefConfigPath = Join-Path -path $tempInstallDir -childPath 'client.rb'
+  #$chefConfigPath = Join-Path -path $tempInstallDir -childPath 'client.rb'
   $omniUrl = "https://omnitruck.chef.io/install.ps1"
   $TeracyDevInstallationurl = "https://github.com/phucvdb/chefdk_bootstrap/archive/master.zip"
   $zipfile=Join-Path -path $env:TEMP -childpath 'TeracyDevInstallation.zip'
@@ -153,7 +153,8 @@ function Install-Project {
   # Add ChefDK to the path
   $env:Path += ";C:\opscode\chefdk\bin"
 
-  $tempInstallDi=Join-Path -path $tempInstallDir -childpath 'chefdk_bootstrap-master'
+  $tempInstallDir=Join-Path -path $tempInstallDir -childpath 'chefdk_bootstrap-master'
+  $chefConfigPath = Join-Path -path $tempInstallDir -childPath 'client.rb'
 
   Push-Location $tempInstallDir
 
