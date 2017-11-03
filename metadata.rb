@@ -22,6 +22,7 @@ version          '0.0.1'
 
 supports 'windows'
 supports 'mac_os_x'
+supports 'ubuntu', '>= 16.04'
 
 depends 'atom', '~> 0.2.0'
 depends 'chocolatey', '~> 1.0'

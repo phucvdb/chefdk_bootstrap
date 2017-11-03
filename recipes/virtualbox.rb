@@ -13,7 +13,7 @@
 # limitations under the License.
 #
 
-case node['platform_family']
+case node['platform']
 when 'windows'
   chocolatey_package 'virtualbox' do
     options '--allow-empty-checksums --version 5.1.14 -y'
@@ -23,5 +23,18 @@ when 'mac_os_x'
     source node['chefdk_bootstrap']['virtualbox']['source']
     checksum node['chefdk_bootstrap']['virtualbox']['checksum']
     type 'pkg'
+  end
+when 'ubuntu'
+  apt_repository 'virtualboxrepo' do
+    uri 'http://download.virtualbox.org/virtualbox/debian'
+    key ['http://download.virtualbox.org/virtualbox/debian/oracle_vbox_2016.asc', 'https://www.virtualbox.org/download/oracle_vbox.asc']
+    distribution 'xenial contrib non-free'
+    action :add
+  end
+  apt_update 'virtualboxrepo' do
+    action :update
+  end
+  apt_package 'virtualbox-5.1' do
+    action :install
   end
 end

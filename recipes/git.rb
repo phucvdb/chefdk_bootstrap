@@ -1,3 +1,4 @@
+
 # Copyright 2015 Nordstrom, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,5 +23,7 @@ when 'windows'
   end
   # chocolatey_package 'poshgit'
 when 'mac_os_x'
+  package 'git'
+when 'debian'
   package 'git'
 end

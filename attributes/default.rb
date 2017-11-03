@@ -14,10 +14,11 @@
 #
 
 default['chefdk_bootstrap']['atom']['source_url'] =
-  value_for_platform_family(
-    'mac_os_x' => 'https://atom.io/download/mac',
-    'windows' => 'https://atom.io/download/windows'
-  )
+value_for_platform_family(
+  'mac_os_x' => 'https://atom.io/download/mac',
+  'windows' => 'https://atom.io/download/windows',
+  'ubuntu' => 'https://atom.io/download/ubuntu'
+)
 
 # common things to install
 default['chefdk_bootstrap']['package'].tap do |install|
@@ -30,7 +31,7 @@ default['chefdk_bootstrap']['package'].tap do |install|
 end
 
 # platform specific
-case node['platform_family']
+case node['platform']
 when 'windows'
   default['chefdk_bootstrap']['package'].tap do |install|
     install['kdiff3'] = true
@@ -47,6 +48,15 @@ when 'mac_os_x'
     install['iterm2'] = true
     install['bash_profile'] = true
   end
+  default['chefdk_bootstrap']['virtualbox']['source'] = 'http://download.virtualbox.org/virtualbox/5.1.14/VirtualBox-5.1.14-112924-OSX.dmg'
+  default['chefdk_bootstrap']['virtualbox']['checksum'] = 'f12ed3b1f98c45074e52742d1006c418acd22d0d91e8a6fb6f7b3121c21ce998'  
+when 'ubuntu'
+  default['vagrant']['version'] = '1.9.1'
+  default['vagrant']['url']         = 'https://releases.hashicorp.com/vagrant/1.9.1/vagrant_1.9.1_x86_64.deb'
+  default['vagrant']['checksum']    = 'd006d6227e049725b64d8ba3967f0c82460a403ff40230515c93134d58723150'
+  default['chefdk_bootstrap']['virtualbox']['source'] = 'http://download.virtualbox.org/virtualbox/5.1.14/virtualbox-5.1_5.1.14-112924~Ubuntu~xenial_amd64.deb'
+  default['chefdk_bootstrap']['virtualbox']['checksum'] = '61bd2e0b702e80c6f9b61e900a7cd6b773ca03cdf1de1439241ec126a518fdce'
+  default['chefdk_bootstrap']['virtualbox']['version'] = '5.1'
 end
 
 # whether to mess with PowerShell settings
@@ -57,6 +67,3 @@ default['chefdk_bootstrap']['powershell']['configure'] = true
 default['chefdk_bootstrap']['proxy']['http'] = ENV['http_proxy'] # 'http://myproxy.example.com:1234'
 # Skip the proxy for these domains and IPs. This should be a comma-separated string
 default['chefdk_bootstrap']['proxy']['no_proxy'] = ENV['no_proxy'] # 'example.com,localhost,127.0.0.1'
-
-default['chefdk_bootstrap']['virtualbox']['source'] = 'http://download.virtualbox.org/virtualbox/5.1.14/VirtualBox-5.1.14-112924-OSX.dmg'
-default['chefdk_bootstrap']['virtualbox']['checksum'] = 'f12ed3b1f98c45074e52742d1006c418acd22d0d91e8a6fb6f7b3121c21ce998'
