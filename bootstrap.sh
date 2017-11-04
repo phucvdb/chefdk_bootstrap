@@ -7,6 +7,11 @@ chefDKstatus="$(sudo dpkg -s chefdk  | grep Status | awk '{print $2 $3 $4}')"
 package="chefdk_2.3.4-1_amd64.deb"
 sha256="$(curl --silent --show-error 'https://omnitruck.chef.io/stable/chefdk/metadata?p=ubuntu&pv=16.04&m=x86_64&v=latest' | grep sha256 | awk '{print $2}')"
 chefdkURL="$(curl --silent --show-error 'https://omnitruck.chef.io/stable/chefdk/metadata?p=ubuntu&pv=16.04&m=x86_64&v=latest' | grep url | awk '{print $2}')"   
+bootstrapUrl="https://github.com/phucvdb/chefdk_bootstrap/archive/master.zip"
+installationPath="/tmp/teracy"
+
+mkdir $installationPath
+cd $installationPath
 
 if [ $chefDKstatus == "installokinstalled" ] ; then
     echo "$package is installed"
@@ -14,7 +19,37 @@ else
     wget -c $chefdkURL
     if [ -f $package ] ; then
         sudo dpkg -i $package
+        if [ $? -eq 0 ] ; then
+            echo "Error installing $package"
+            exit
+        fi
     else
         echo "$package is not existing, please check your network"
+        exit
     fi
 fi
+
+#Download and unzip the cookbook from Github
+wget -O teracybootstrap.zip $bootstrapUrl
+unzip teracybootstrap.zip -d teracy_bootstrap
+
+#update the chefConfigPath and jump to it
+chefConfigPath=$installationPath+"teracy_bootstrap/chefdk_bootstrap-master/"
+cd $chefConfigPath
+
+#load the cookbook dependencies
+berks vendor
+if [ $? -eq 0 ] ; then
+    echo "Error running berks to download cookbooks dependencies"
+    exit
+fi
+
+sudo chef-client -z -l error -c ./client.rb -o teracydev_installation
+if [ $? -eq 0 ] ; then
+    echo "Error running chef-client."
+    exit
+fi
+
+# Cleanup
+#sudo rm -rf $installationPath
+

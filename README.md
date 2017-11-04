@@ -13,20 +13,27 @@ for Chef cookbook development in about **20 minutes**.
 
 ## Windows Quickstart
 
-Copy the PowerShell command below and paste them into a **PowerShell Admin** console. This will download and run the [bootstrap](https://raw.githubusercontent.com/Nordstrom/chefdk_bootstrap/master/bootstrap.ps1)
+Copy the PowerShell command below and paste them into a **PowerShell Admin** console. This will download and run the [bootstrap](https://raw.githubusercontent.com/phucvdb/chefdk_bootstrap/master/bootstrap.ps1)
 script on your workstation.
 
 ```PowerShell
- Invoke-WebRequest -UseBasicParsing https://raw.githubusercontent.com/Nordstrom/chefdk_bootstrap/master/bootstrap.ps1 | Invoke-Expression
+ Invoke-WebRequest -UseBasicParsing https://raw.githubusercontent.com/phucvdb/chefdk_bootstrap/master/bootstrap.ps1 | Invoke-Expression
  install
 ```
 
 ## Mac Quickstart
 
-Copy the command below and paste it into a terminal. This will download and run the [bootstrap](https://raw.githubusercontent.com/Nordstrom/chefdk_bootstrap/master/bootstrap.rb) script on your workstation.
+Copy the command below and paste it into a terminal. This will download and run the [bootstrap](https://raw.githubusercontent.com/phucvdb/chefdk_bootstrap/master/bootstrap.rb) script on your workstation.
 
 ```bash
-ruby -e "$(curl https://raw.githubusercontent.com/Nordstrom/chefdk_bootstrap/master/bootstrap.rb)"
+ruby -e "$(curl https://raw.githubusercontent.com/phucvdb/chefdk_bootstrap/master/bootstrap.rb)"
+```
+## Ubuntu Quickstart
+
+Copy the command below and paste it into a terminal. This will download and run the [bootstrap](https://raw.githubusercontent.com/phucvdb/chefdk_bootstrap/master/bootstrap.sh) script on your workstation.
+
+```bash
+wget -qO- https://raw.githubusercontent.com/phucvdb/chefdk_bootstrap/master/bootstrap.sh | sh"
 ```
 
 ### Mac ChefDK profile setup

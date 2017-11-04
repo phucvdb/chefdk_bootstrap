@@ -96,7 +96,7 @@ function Install-Project {
   ### This bootstrap script will:
 
   1. Install the ChefDK version $targetChefDk.
-  2. Download the $bootstrapCookbook cookbook via Berkshelf
+  2. Download the $bootstrapCookbook cookbook via GitHub
   3. Run chef-client to install the rest of the tools you'll need.
 
 "@
