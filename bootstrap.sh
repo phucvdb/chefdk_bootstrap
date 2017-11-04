@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #set -v
 #This script is to install chefdk_bootstrap on Ubuntu
 
@@ -10,16 +10,18 @@ chefdkURL="$(curl --silent --show-error 'https://omnitruck.chef.io/stable/chefdk
 bootstrapUrl="https://github.com/phucvdb/chefdk_bootstrap/archive/master.zip"
 installationPath="/tmp/teracy"
 
-mkdir $installationPath
+if [ ! -d $installationPath ] ; then 
+    mkdir $installationPath
+fi
 cd $installationPath
 
-if [ $chefDKstatus == "installokinstalled" ] ; then
+if [ $chefDKstatus = "installokinstalled" ] ; then
     echo "$package is installed"
 else
     wget -c $chefdkURL
     if [ -f $package ] ; then
         sudo dpkg -i $package
-        if [ $? -eq 0 ] ; then
+        if [ $? -ne 0 ] ; then
             echo "Error installing $package"
             exit
         fi
@@ -34,22 +36,34 @@ wget -O teracybootstrap.zip $bootstrapUrl
 unzip teracybootstrap.zip -d teracy_bootstrap
 
 #update the chefConfigPath and jump to it
-chefConfigPath=$installationPath+"teracy_bootstrap/chefdk_bootstrap-master/"
+chefConfigPath="$installationPath/teracy_bootstrap/chefdk_bootstrap-master/"
 cd $chefConfigPath
 
 #load the cookbook dependencies
 berks vendor
-if [ $? -eq 0 ] ; then
-    echo "Error running berks to download cookbooks dependencies"
+if [ $? -ne 0 ] ; then
+    echo "$? Error running berks to download cookbooks dependencies"
     exit
 fi
 
 sudo chef-client -z -l error -c ./client.rb -o teracydev_installation
-if [ $? -eq 0 ] ; then
+if [ $? -ne 0 ] ; then
     echo "Error running chef-client."
     exit
 fi
 
-# Cleanup
-#sudo rm -rf $installationPath
+vagrant plugin install vagrant-gatling-rsync
+if [ $? -ne 0 ] ; then
+    echo "Error installing vagrant-gatling-rsync."
+    exit
+fi
 
+vagrant plugin install vagrant-rsync-back
+if [ $? -ne 0 ] ; then
+    echo "Error installing vagrant-rsync-back."
+    exit
+fi
+
+
+# Cleanup
+sudo rm -rf $installationPath
