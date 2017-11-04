@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #set -v
 #This script is to install chefdk_bootstrap on Ubuntu
 
