@@ -48,6 +48,9 @@ when 'mac_os_x'
     install['iterm2'] = true
     install['bash_profile'] = true
   end
+  default['vagrant']['version']     = '1.9.1'
+  default['vagrant']['url']         = 'https://releases.hashicorp.com/vagrant/1.9.1/vagrant_1.9.1.dmg'
+  default['vagrant']['checksum']    = '17191ff7a1d796aa89c558b45c706288275dade6a65e2b219c2efa0e54c02ef7'
   default['chefdk_bootstrap']['virtualbox']['source'] = 'http://download.virtualbox.org/virtualbox/5.1.14/VirtualBox-5.1.14-112924-OSX.dmg'
   default['chefdk_bootstrap']['virtualbox']['checksum'] = 'f12ed3b1f98c45074e52742d1006c418acd22d0d91e8a6fb6f7b3121c21ce998'  
 when 'ubuntu'
@@ -58,6 +61,8 @@ when 'ubuntu'
   default['chefdk_bootstrap']['virtualbox']['checksum'] = '61bd2e0b702e80c6f9b61e900a7cd6b773ca03cdf1de1439241ec126a518fdce'
   default['chefdk_bootstrap']['virtualbox']['version'] = '5.1'
 end
+
+default['vagrant']['plugins'] = ['vagrant-gatling-rsync', 'vagrant-rsync-back']
 
 # whether to mess with PowerShell settings
 default['chefdk_bootstrap']['powershell']['configure'] = true

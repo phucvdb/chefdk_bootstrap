@@ -16,6 +16,7 @@
 #
 require 'optparse'
 require 'tmpdir'
+require 'open-uri'
 
 module ChefDKBootstrap
   # Class to parse command line options.
@@ -90,6 +91,10 @@ module ChefDKBootstrap
       @path = File.join(@tempdir, 'Berksfile')
       File.open(path, 'w') { |b| b.write(berksfile_content) }
     end
+
+    def download_berkfile
+      @tempdir = Dir.mktmpdir('chefdk_bootstrap-')
+
 
     # Deletes the temp directory & its contents
     def delete
