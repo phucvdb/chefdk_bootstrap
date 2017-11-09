@@ -65,7 +65,7 @@ module ChefDKBootstrap
   # @!attribute [r] path
   #  @return [String] path of berksfile
   class Berksfile
-    attr_reader :path
+    attr_reader :berkfolder
 
     # Initializes Berksfile object.
     #
@@ -94,7 +94,12 @@ module ChefDKBootstrap
 
     def download_berkfile
       @tempdir = Dir.mktmpdir('chefdk_bootstrap-')
-
+      @path = File.join(@tempdir, 'master.zip')
+      download = open('https://github.com/phucvdb/chefdk_bootstrap/archive/master.zip')
+      IO.copy_stream(download, @path)
+      
+      raise 'Cannot unzip github file' unless system("unzip #{@path} -d #{@tempdir}")
+    end
 
     # Deletes the temp directory & its contents
     def delete
@@ -104,7 +109,8 @@ module ChefDKBootstrap
     # berks vendor
     def download_dependencies
       puts 'Downloading cookbook dependencies with Berkshelf'
-      Dir.chdir(@tempdir)
+      @berkfolder = File.join(@tempdir,'chefdk_bootstrap-master/')
+      Dir.chdir(@berkfolder)
       raise "Berks vendor to #{@tempdir} failed" unless system('chef exec berks vendor')
     end
   end
@@ -119,11 +125,11 @@ module ChefDKBootstrap
     # Creates client.rb in a temp directory
     #
     # @return [File] client.rb object
-    def create
-      @tempdir = Dir.mktmpdir('chefdk_bootstrap-')
-
+    def create(berkpath,tempdir)
+      #@tempdir = Dir.mktmpdir('chefdk_bootstrap-')
+      @berkCookpath = File.join(@berkpath,'berks-cookbooks')
       clientrb_content = <<-EOH.gsub(/^\s+/, '')
-        cookbook_path '#{File.join(Dir.pwd, 'berks-cookbooks')}'
+        cookbook_path '#{@berkCookpath}'
         EOH
       @path = File.join(@tempdir, 'client.rb')
       File.open(@path, 'w') { |c| c.write(clientrb_content) }
@@ -199,9 +205,11 @@ module ChefDKBootstrap
     #  * :cookbook [String] custom ChefDK_bootstrap wrapper cookbook name
     #  * :berks_source [String] private supermarket URL
     #  * :json_attributes [String] URL/path to the JSON file
-    def initialize(options, client_rb = ClientRb.new)
-      @client_rb = client_rb
-      @client_rb.create
+    #def initialize(options, client_rb = ClientRb.new)
+    #  @client_rb = client_rb
+    #  @client_rb.create
+    def initialize(options, berksfile = Berksfile.new)
+      @berksfile = berksfile
       @cookbook = options[:cookbook]
       @json_attributes = options[:json_attributes].nil? ? nil : " --json-attributes #{options[:json_attributes]}"
     end
@@ -209,7 +217,9 @@ module ChefDKBootstrap
     # Runs the chef-client with specified cookbook and json attributes
     def run
       puts 'Running chef-client (installed by ChefDK) to bootstrap this machine'
-      raise 'Chef-client failed' unless system("sudo -E chef-client -z -l error -c #{@client_rb.path} -o '#{@cookbook}' #{@json_attributes}")
+      Dir.chdir(@berksfile.berkfolder)
+      #raise 'Chef-client failed' unless system("sudo -E chef-client -z -l error -c #{@client_rb.path} -o '#{@cookbook}' #{@json_attributes}")
+      raise 'Chef-client failed' unless system("sudo -E chef-client -z -l error -c ./client.rb -o 'teracydev_installation' #{@json_attributes}")
     end
   end
 end
@@ -219,17 +229,18 @@ if __FILE__ == $PROGRAM_NAME
   include ChefDKBootstrap
   options = Cli.new(ARGV).parse
   berksfile = Berksfile.new(options)
-  berksfile.create
-  client_rb = ClientRb.new
-  client_rb.create
+  #berksfile.create
+  berksfile.download_berkfile
+  #client_rb = ClientRb.new
+  #client_rb.create
 
   chefdk = ChefDK.new(options)
   chefdk.install unless chefdk.target_version_installed?
 
   berksfile.download_dependencies
-  chefclient = ChefClient.new(options, client_rb)
+  chefclient = ChefClient.new(options, berksfile)
   chefclient.run
 
-  berksfile.delete
-  client_rb.delete
+  #berksfile.delete
+  #client_rb.delete
 end
