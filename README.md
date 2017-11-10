@@ -33,7 +33,7 @@ ruby -e "$(curl https://raw.githubusercontent.com/phucvdb/chefdk_bootstrap/maste
 Copy the command below and paste it into a terminal. This will download and run the [bootstrap](https://raw.githubusercontent.com/phucvdb/chefdk_bootstrap/master/bootstrap.sh) script on your workstation.
 
 ```bash
-wget -qO- https://raw.githubusercontent.com/phucvdb/chefdk_bootstrap/master/bootstrap.sh | sh"
+wget -qO- https://raw.githubusercontent.com/phucvdb/chefdk_bootstrap/master/bootstrap.sh | sh
 ```
 
 ### Mac ChefDK profile setup
